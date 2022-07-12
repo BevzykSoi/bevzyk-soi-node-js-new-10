@@ -1,0 +1,25 @@
+{
+  "name": "fe_js_advanced_nodejs",
+  "version": "1.0.0",
+  "description": "Todos",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "gh": "^2.8.9",
+    "heroku": "^7.60.2",
+    "mongoose": "^6.4.4",
+    "nanoid": "^3.3.4",
+    "volleyball": "^1.5.1",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  }
+}
