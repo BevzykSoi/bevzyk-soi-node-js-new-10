@@ -11,7 +11,7 @@ exports.createTodo = async (req, res, next) => {
 
 exports.getAllTodos = async (req, res, next) => {
   try {
-    const todos = await Todo.find(null, "-_id");
+    const todos = await Todo.find(null, "-__v -_id");
     res.json(todos);
   } catch (error) {
     next(error);
@@ -22,7 +22,7 @@ exports.getAllFilteredTodosByPriority = async (req, res, next) => {
   try {
     const todos = await Todo.find({
       priority: 10,
-    }, "-_id");
+    }, "-__v -_id");
     res.json(todos);
   } catch (error) {
     next(error);
@@ -39,7 +39,7 @@ exports.getAllFilteredTodosByTags = async (req, res, next) => {
       tags: {
         $in: tagsArray,
       },
-    }, "-_id");
+    }, "-__v -_id");
     res.json(todos);
   } catch (error) {
     next(error);
@@ -63,7 +63,7 @@ exports.getAllFilteredTodosByPage = async (req, res, next) => {
         $regex: searchQuery,
         $options: "i",
       }
-    }, "-_id", {
+    }, "-__v -_id", {
       limit: perPage,
       skip: (page - 1) * perPage,
     });
@@ -81,7 +81,7 @@ exports.getAllFilteredTodosByPage = async (req, res, next) => {
 exports.getTodoById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const todo = await Todo.findById(id);
+    const todo = await Todo.findById(id, "-__v");
     if (!todo) {
       res.status(404).json({
         message: `Not found id ${id}`,

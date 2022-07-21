@@ -24,8 +24,8 @@ const todoSchema = new Schema({
 }, {
     timestamps: true,
     versionKey: false,
-    toObject: {},
     toJSON: {},
+    toObject: {},
 });
 
 module.exports = model("Todo", todoSchema);
