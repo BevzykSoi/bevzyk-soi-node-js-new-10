@@ -6,6 +6,7 @@ exports.createOrUpdate = Yup.object().shape({
     .max(255)
     .required(),
   priority: Yup.number().min(1).max(10).required(),
+  tags: Yup.array().of(Yup.string()).required(),
 });
 
 exports.updateStatus = Yup.object().shape({

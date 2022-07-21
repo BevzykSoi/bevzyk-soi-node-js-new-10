@@ -18,6 +18,14 @@ const todoSchema = new Schema({
         default: false,
     },
     author: String,
+    tags: [{
+        type: String,
+    }]
+}, {
+    timestamps: true,
+    versionKey: false,
+    toObject: {},
+    toJSON: {},
 });
 
 module.exports = model("Todo", todoSchema);

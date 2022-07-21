@@ -11,7 +11,62 @@ exports.createTodo = async (req, res, next) => {
 
 exports.getAllTodos = async (req, res, next) => {
   try {
-    const todos = await Todo.find();
+    const todos = await Todo.find(null, "-_id");
+    res.json(todos);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllFilteredTodosByPriority = async (req, res, next) => {
+  try {
+    const todos = await Todo.find({
+      priority: 10,
+    }, "-_id");
+    res.json(todos);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllFilteredTodosByTags = async (req, res, next) => {
+  try {
+    const { tags } = req.query;
+
+    const tagsArray = tags.split(", ");
+
+    const todos = await Todo.find({
+      tags: {
+        $in: tagsArray,
+      },
+    }, "-_id");
+    res.json(todos);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getAllFilteredTodosByPage = async (req, res, next) => {
+  try {
+    let { page, searchQuery } = req.query;
+
+    if (!page) {
+      page = 1;
+    } else {
+      page = +page;
+    }
+
+    const perPage = 3;
+
+    const todos = await Todo.find({
+      text: {
+        $regex: searchQuery,
+        $options: "i",
+      }
+    }, "-_id", {
+      limit: perPage,
+      skip: (page - 1) * perPage,
+    });
     res.json(todos);
   } catch (error) {
     next(error);
@@ -95,3 +150,42 @@ exports.updateTodoStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+
+exports.addTagsToSet = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { tags } = req.body;
+    const updatedTodo = await Todo.findByIdAndUpdate(id, {
+      $addToSet: {
+        tags: {
+          $each: tags,
+        }
+      }
+    }, {
+      new: true,
+    });
+
+    res.json(updatedTodo);
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.pullAllTags = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { tags } = req.body;
+    const updatedTodo = await Todo.findByIdAndUpdate(id, {
+      $pullAll: {
+        tags,
+      }
+    }, {
+      new: true,
+    });
+
+    res.json(updatedTodo);
+  } catch (error) {
+    next(error);
+  }
+}
